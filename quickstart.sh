@@ -1,5 +1,5 @@
 #!/bin/bash
-# wheelwright Quickstart Script
+# sagepypi Quickstart Script
 # Sets up development checks and git hooks
 
 set -e
@@ -21,7 +21,7 @@ echo -e "${BOLD}${BLUE} _\\ \/ _ \/ _ \/ -_)   / /    / / / / / __  |${NC}"
 echo -e "${BOLD}${BLUE}/___/\\___/\\_, /\\__/   /_/    /_/ /_/ /____/ ${NC}"
 echo -e "${BOLD}${BLUE}         /___/                               ${NC}"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${GREEN}${BOLD}wheelwright Quickstart Setup${NC}"
+echo -e "${GREEN}${BOLD}sagepypi Quickstart Setup${NC}"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
@@ -104,12 +104,12 @@ else
     echo -e "${RED}✗ Python not found${NC}"
 fi
 
-# Check for wheelwright
-if command -v wheelwright &> /dev/null; then
-    echo -e "${GREEN}✓ wheelwright found${NC}"
+# Check for sagepypi
+if command -v sagepypi &> /dev/null; then
+    echo -e "${GREEN}✓ sagepypi found${NC}"
 else
-    echo -e "${YELLOW}⚠  wheelwright not found${NC}"
-    echo -e "${YELLOW}  Optional for PyPI publishing: pip install wheelwright${NC}"
+    echo -e "${YELLOW}⚠  sagepypi not found${NC}"
+    echo -e "${YELLOW}  Optional for PyPI publishing: pip install sagepypi${NC}"
 fi
 
 echo ""
@@ -194,8 +194,8 @@ echo -e "  ${GREEN}•${NC} pre-push: Prevents duplicate PyPI versions and can a
 echo ""
 echo -e "${BLUE}${BOLD}Useful Commands:${NC}"
 echo -e "  ${CYAN}./build.sh${NC}                    - Quick rebuild"
-echo -e "  ${CYAN}wheelwright build${NC}     - Build distribution packages"
-echo -e "  ${CYAN}wheelwright publish${NC}   - Build and publish to PyPI"
+echo -e "  ${CYAN}sagepypi build .${NC}              - Build distribution packages"
+echo -e "  ${CYAN}sagepypi build . --upload --no-dry-run${NC} - Build and publish to PyPI"
 echo ""
 echo -e "${GREEN}Happy coding! 🚀${NC}"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"

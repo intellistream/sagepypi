@@ -1,4 +1,4 @@
-"""Version information for wheelwright."""
+"""Version information for sagepypi."""
 
 __version__ = "0.2.1.4"
 __author__ = "IntelliStream Team"

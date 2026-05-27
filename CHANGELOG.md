@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 - Rename the public tool branding from `sage-pypi-publisher` to `pypi-publisher` across the CLI, package metadata, hooks, and quickstart flow so it can be released as a general-purpose publisher.
 - Rename the public tool branding from `pypi-publisher` to `wheelwright` across the package, CLI, source module, docs, and workspace integration.
+- Rename the public tool branding from `wheelwright` to `sagepypi` across the package, CLI, source module, docs, and workspace integration.
 
 ### Fixed
 - Issue #6: CI workflow 补充 `workflow_dispatch`，确保 `main-dev` 可手动触发并作为主开发分支稳定运行。
@@ -35,11 +36,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [0.1.9.9] - 2026-02-20
 
 ### Added
-- **`keep_source` 配置支持**：`pyproject.toml` 中的 `[tool.wheelwright]` 节现在支持 `keep_source` 列表，允许在 `private` (pyc-only) 模式下保留指定 `.py` 源文件。
+- **`keep_source` 配置支持**：`pyproject.toml` 中的 `[tool.sagepypi]` 节现在支持 `keep_source` 列表，允许在 `private` (pyc-only) 模式下保留指定 `.py` 源文件。
   - 用途：Triton 内核等依赖 `inspect.getsourcelines()` 的 JIT 编译器需要运行时可读取 `.py` 源码，通过此选项可在保密发布的同时保留必要的源文件。
   - 配置示例：
     ```toml
-    [tool.wheelwright]
+    [tool.sagepypi]
     keep_source = [
         "src/mypkg/kernels/fused_ops.py",
     ]

@@ -1,4 +1,4 @@
-"""Git hooks management for wheelwright."""
+"""Git hooks management for sagepypi."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from rich.console import Console
 console = Console()
 
 PRE_PUSH_HOOK_TEMPLATE = """#!/bin/bash
-# Pre-push hook managed by wheelwright
+# Pre-push hook managed by sagepypi
 # Auto-detects version updates and offers to build/upload to PyPI
 
 set -e
@@ -58,9 +58,9 @@ if [ "$VERSION_UPDATED" = true ]; then
         echo -e "${GREEN}🔨 Building package...${NC}"
         rm -rf dist/ wheelhouse/ 2>/dev/null || true
 
-        if command -v wheelwright &> /dev/null; then
-            echo -e "${GREEN}Using wheelwright (auto-detects build type)...${NC}"
-            if wheelwright build . --upload --no-dry-run; then
+        if command -v sagepypi &> /dev/null; then
+            echo -e "${GREEN}Using sagepypi (auto-detects build type)...${NC}"
+            if sagepypi build . --upload --no-dry-run; then
                 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
                 echo -e "${GREEN}✓ Successfully uploaded ${CURRENT_VERSION} to PyPI${NC}"
                 echo -e "${GREEN}🔗 https://pypi.org/project/{package_name}/${CURRENT_VERSION}/${NC}"
@@ -72,8 +72,8 @@ if [ "$VERSION_UPDATED" = true ]; then
                 [[ ! "$cont" =~ ^[Yy]$ ]] && exit 1
             fi
         else
-            echo -e "${YELLOW}⚠ wheelwright not found${NC}"
-            echo -e "${YELLOW}Install: pip install wheelwright${NC}"
+            echo -e "${YELLOW}⚠ sagepypi not found${NC}"
+            echo -e "${YELLOW}Install: pip install sagepypi${NC}"
             echo -e "${YELLOW}Continue push? [y/N]${NC}"
             read -r cont </dev/tty
             [[ ! "$cont" =~ ^[Yy]$ ]] && exit 1
@@ -125,8 +125,8 @@ else
 
         if [[ "$upload_resp" =~ ^[Yy]$ ]]; then
             rm -rf dist/ wheelhouse/ 2>/dev/null || true
-            if command -v wheelwright &> /dev/null; then
-                wheelwright build . --upload --no-dry-run
+            if command -v sagepypi &> /dev/null; then
+                sagepypi build . --upload --no-dry-run
                 echo -e "${GREEN}✓ Uploaded ${new_version} to PyPI${NC}"
             fi
         fi
@@ -143,7 +143,7 @@ exit 0
 """
 
 PRE_COMMIT_HOOK_TEMPLATE = """#!/bin/bash
-# Pre-commit hook managed by wheelwright
+# Pre-commit hook managed by sagepypi
 # Runs code quality checks (ruff, mypy) if available
 
 set -e
@@ -194,7 +194,7 @@ echo -e "${GREEN}✓ All checks passed!${NC}"
 
 def install_git_hooks(package_path: Path | None = None) -> bool:
     """
-    Install wheelwright git hooks into the current repository.
+    Install sagepypi git hooks into the current repository.
 
     Args:
         package_path: Path to the package directory. If None, uses current directory.
@@ -244,7 +244,7 @@ def install_git_hooks(package_path: Path | None = None) -> bool:
     # Backup existing pre-push hook if it exists
     if pre_push_hook.exists():
         backup_path = hooks_dir / "pre-push.backup"
-        if "wheelwright" not in pre_push_hook.read_text():
+        if "sagepypi" not in pre_push_hook.read_text():
             console.print(
                 f"[yellow]Backing up existing pre-push hook to {backup_path.name}[/yellow]"
             )
@@ -262,7 +262,7 @@ def install_git_hooks(package_path: Path | None = None) -> bool:
     # Backup existing pre-commit hook if it exists
     if pre_commit_hook.exists():
         backup_path = hooks_dir / "pre-commit.backup"
-        if "wheelwright" not in pre_commit_hook.read_text():
+        if "sagepypi" not in pre_commit_hook.read_text():
             console.print(
                 f"[yellow]Backing up existing pre-commit hook to {backup_path.name}[/yellow]"
             )
@@ -287,7 +287,7 @@ def install_git_hooks(package_path: Path | None = None) -> bool:
 
 def uninstall_git_hooks(package_path: Path | None = None) -> bool:
     """
-    Uninstall wheelwright git hooks.
+    Uninstall sagepypi git hooks.
 
     Args:
         package_path: Path to the package directory. If None, uses current directory.
@@ -311,7 +311,7 @@ def uninstall_git_hooks(package_path: Path | None = None) -> bool:
     # Remove pre-push
     if pre_push_hook.exists():
         content = pre_push_hook.read_text(encoding="utf-8")
-        if "wheelwright" in content:
+        if "sagepypi" in content:
             backup_path = git_dir / "hooks" / "pre-push.backup"
             if backup_path.exists():
                 console.print("[cyan]Restoring pre-push backup...[/cyan]")
@@ -326,7 +326,7 @@ def uninstall_git_hooks(package_path: Path | None = None) -> bool:
     # Remove pre-commit
     if pre_commit_hook.exists():
         content = pre_commit_hook.read_text(encoding="utf-8")
-        if "wheelwright" in content:
+        if "sagepypi" in content:
             backup_path = git_dir / "hooks" / "pre-commit.backup"
             if backup_path.exists():
                 console.print("[cyan]Restoring pre-commit backup...[/cyan]")

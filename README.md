@@ -1,6 +1,6 @@
-# wheelwright
+# sagepypi
 
-Wheelwright is a Python packaging workflow tool that compiles packages to bytecode, builds wheels, and publishes to PyPI/TestPyPI.
+sagepypi is a Python packaging workflow tool that compiles packages to bytecode, builds wheels, and publishes to PyPI/TestPyPI.
 
 ## Features
 - Copy a package tree and compile `.py` → `.pyc` (keeps `__init__.py` and `_version.py`).
@@ -16,11 +16,11 @@ Wheelwright is a Python packaging workflow tool that compiles packages to byteco
 
 **Problem:** Your package declares support for Python 3.8-3.12, but you only upload a wheel for Python 3.11. Users on other versions can't install it!
 
-**Solution:** wheelwright now uses **Smart Mode by default** 🎯
+**Solution:** sagepypi now uses **Smart Mode by default** 🎯
 
 ```bash
 # That's it! No extra flags needed - smart mode is automatic
-wheelwright build . --upload --no-dry-run
+sagepypi build . --upload --no-dry-run
 ```
 
 **What happens automatically:**
@@ -38,7 +38,7 @@ wheelwright build . --upload --no-dry-run
 ```bash
 pip install .
 # or
-pip install wheelwright
+pip install sagepypi
 ```
 
 ## CLI
@@ -48,13 +48,13 @@ pip install wheelwright
 **🎯 Simplest Usage (Smart Mode - Default!)**
 ```bash
 # Just build - automatically chooses best strategy!
-wheelwright build .
+sagepypi build .
 
 # Build and upload to TestPyPI
-wheelwright build . --upload -r testpypi
+sagepypi build . --upload -r testpypi
 
 # Build and upload to PyPI (production)
-wheelwright build . --upload --no-dry-run -r pypi
+sagepypi build . --upload --no-dry-run -r pypi
 ```
 
 **What Smart Mode Does (Automatically):**
@@ -67,43 +67,43 @@ wheelwright build . --upload --no-dry-run -r pypi
 **Manual Control (Advanced):**
 ```bash
 # Disable smart mode (old behavior - current Python only)
-wheelwright build . --no-for-pypi
+sagepypi build . --no-for-pypi
 
 # Force universal wheel
-wheelwright build . --universal
+sagepypi build . --universal
 
 # Force specific mode
-wheelwright build . --mode public
+sagepypi build . --mode public
 ```
 
 ### All Commands
 
 ```bash
-wheelwright --help
+sagepypi --help
 
 # 🎯 Simplest: Build with smart mode (default!)
-wheelwright build .
+sagepypi build .
 
 # Build and upload to PyPI
-wheelwright build . --upload --no-dry-run
+sagepypi build . --upload --no-dry-run
 
 # Compile only (bytecode mode by default)
-wheelwright compile /path/to/pkg -o /tmp/out
+sagepypi compile /path/to/pkg -o /tmp/out
 
 # Compile in public mode (keep source)
-wheelwright compile /path/to/pkg -o /tmp/out --mode public
+sagepypi compile /path/to/pkg -o /tmp/out --mode public
 
 # Disable smart mode (old behavior)
-wheelwright build /path/to/pkg --no-for-pypi
+sagepypi build /path/to/pkg --no-for-pypi
 
 # Force universal wheel (manual override)
-wheelwright build /path/to/pkg --universal
+sagepypi build /path/to/pkg --universal
 
 # Force manylinux build for C/C++ extensions
-wheelwright build /path/to/pkg --force-manylinux
+sagepypi build /path/to/pkg --force-manylinux
 
 # Upload an existing wheel
-wheelwright upload dist/yourpkg-0.1.0-py3-none-any.whl -r pypi --no-dry-run
+sagepypi upload dist/yourpkg-0.1.0-py3-none-any.whl -r pypi --no-dry-run
 ```
 
 ### Build Modes
@@ -117,7 +117,7 @@ wheelwright upload dist/yourpkg-0.1.0-py3-none-any.whl -r pypi --no-dry-run
 ### Basic Usage
 ```python
 from pathlib import Path
-from wheelwright.compiler import BytecodeCompiler
+from sagepypi.compiler import BytecodeCompiler
 
 # Create compiler
 compiler = BytecodeCompiler(Path("/path/to/pkg"), mode="private")
@@ -141,12 +141,12 @@ For C/C++ extension packages targeting multiple Python versions, use `cibuildwhe
 
 ## Git Hooks
 
-wheelwright provides intelligent git hooks to simplify version management and PyPI publishing.
+sagepypi provides intelligent git hooks to simplify version management and PyPI publishing.
 
 ### Hook Installation
 
 ```bash
-wheelwright install-hooks .
+sagepypi install-hooks .
 ```
 
 ### Hook Features

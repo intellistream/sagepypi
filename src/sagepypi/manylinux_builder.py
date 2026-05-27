@@ -14,7 +14,7 @@ from pathlib import Path
 
 from rich.console import Console
 
-from wheelwright.exceptions import BuildError
+from sagepypi.exceptions import BuildError
 
 console = Console()
 

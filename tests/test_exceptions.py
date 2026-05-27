@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from wheelwright.exceptions import BuildError, CompilationError, PyPIPublisherError, UploadError
+from sagepypi.exceptions import BuildError, CompilationError, PyPIPublisherError, UploadError
 
 
 def test_base_exception_string_contains_message_details_and_cause() -> None:

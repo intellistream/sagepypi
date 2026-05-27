@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from wheelwright.detector import detect_build_system
+from sagepypi.detector import detect_build_system
 
 
 def _write(path: Path, content: str) -> None:

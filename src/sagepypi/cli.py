@@ -1,4 +1,4 @@
-"""Command line interface for wheelwright."""
+"""Command line interface for sagepypi."""
 
 from __future__ import annotations
 
@@ -9,10 +9,10 @@ import requests
 import typer
 from rich.console import Console
 
-from wheelwright._version import __version__
-from wheelwright.compiler import BytecodeCompiler
-from wheelwright.detector import detect_build_system
-from wheelwright.manylinux_builder import ManylinuxBuilder
+from sagepypi._version import __version__
+from sagepypi.compiler import BytecodeCompiler
+from sagepypi.detector import detect_build_system
+from sagepypi.manylinux_builder import ManylinuxBuilder
 
 try:
     import tomllib
@@ -22,11 +22,11 @@ except ImportError:
 KNOWN_PACKAGES: list[str] = []
 
 console = Console()
-app = typer.Typer(name="wheelwright", add_completion=False, no_args_is_help=True)
+app = typer.Typer(name="sagepypi", add_completion=False, no_args_is_help=True)
 
 
 def _load_keep_source_patterns(package_path: Path) -> list[str]:
-    """Read [tool.wheelwright] keep_source list from pyproject.toml.
+    """Read [tool.sagepypi] keep_source list from pyproject.toml.
 
     Allows packages to specify which .py files must be kept as source
     (not compiled to .pyc) in private-mode builds, e.g. for Triton kernels
@@ -34,7 +34,7 @@ def _load_keep_source_patterns(package_path: Path) -> list[str]:
 
     Example in pyproject.toml::
 
-        [tool.wheelwright]
+        [tool.sagepypi]
         keep_source = [
             "src/mypkg/kernels/fused_ops.py",
         ]
@@ -44,7 +44,7 @@ def _load_keep_source_patterns(package_path: Path) -> list[str]:
         return []
     try:
         data = tomllib.loads(pyproject.read_text(encoding="utf-8"))
-        return data.get("tool", {}).get("wheelwright", {}).get("keep_source", [])
+        return data.get("tool", {}).get("sagepypi", {}).get("keep_source", [])
     except Exception:  # noqa: BLE001
         return []
 
@@ -135,13 +135,13 @@ def build(
     **Simplest Usage (Recommended):**
     ```bash
     # Just build - smart mode is automatic!
-    wheelwright build .
+    sagepypi build .
 
     # Build and upload to PyPI
-    wheelwright build . --upload --no-dry-run
+    sagepypi build . --upload --no-dry-run
 
     # Test on TestPyPI first
-    wheelwright build . --upload -r testpypi
+    sagepypi build . --upload -r testpypi
     ```
 
     **Why this solves the multi-version problem:**
@@ -157,16 +157,16 @@ def build(
 
     Examples:
         # Default: Smart mode (automatically chooses best strategy)
-        wheelwright build .
+        sagepypi build .
 
         # Upload to TestPyPI (smart mode still active)
-        wheelwright build . --upload -r testpypi
+        sagepypi build . --upload -r testpypi
 
         # Real PyPI upload
-        wheelwright build . --upload --no-dry-run -r pypi
+        sagepypi build . --upload --no-dry-run -r pypi
 
         # Disable smart mode (old behavior)
-        wheelwright build . --no-for-pypi
+        sagepypi build . --no-for-pypi
     """
     # Handle version auto-bump if requested
     if auto_bump:
@@ -296,7 +296,7 @@ def build(
             else:
                 console.print("\n💡 跳过上传。如需上传，可以运行:")
                 console.print(
-                    f"   [cyan]wheelwright upload <artifact> -r {repository} --no-dry-run[/cyan]"
+                    f"   [cyan]sagepypi upload <artifact> -r {repository} --no-dry-run[/cyan]"
                 )
 
 
@@ -324,13 +324,13 @@ def build_manylinux(
 
     Examples:
         # Build a manylinux wheel
-        wheelwright build-manylinux .
+        sagepypi build-manylinux .
 
         # Build and upload (real upload)
-        wheelwright build-manylinux . --upload --no-dry-run
+        sagepypi build-manylinux . --upload --no-dry-run
 
         # Use a specific platform tag
-        wheelwright build-manylinux . --platform manylinux_2_28_x86_64
+        sagepypi build-manylinux . --platform manylinux_2_28_x86_64
     """
     builder = ManylinuxBuilder(package_path)
     wheel_path = builder.build_manylinux_wheel(
@@ -343,7 +343,7 @@ def build_manylinux(
     # Handle upload: auto-upload or prompt user
     if upload:
         console.print(f"\n🚀 准备上传到 {repository.upper()}...")
-        from wheelwright.compiler import BytecodeCompiler
+        from sagepypi.compiler import BytecodeCompiler
 
         compiler = BytecodeCompiler(package_path)
         compiler.upload_wheel(wheel_path, repository=repository, dry_run=dry_run)
@@ -362,14 +362,14 @@ def build_manylinux(
                     dry_run = False
 
             console.print(f"\n🚀 准备上传到 {repository.upper()}...")
-            from wheelwright.compiler import BytecodeCompiler
+            from sagepypi.compiler import BytecodeCompiler
 
             compiler = BytecodeCompiler(package_path)
             compiler.upload_wheel(wheel_path, repository=repository, dry_run=dry_run)
         else:
             console.print("\n💡 跳过上传。如需上传，可以运行:")
             console.print(
-                f"   [cyan]wheelwright upload {wheel_path} -r {repository} --no-dry-run[/cyan]"
+                f"   [cyan]sagepypi upload {wheel_path} -r {repository} --no-dry-run[/cyan]"
             )
 
 
@@ -388,7 +388,7 @@ def upload(
 
 def print_version(value: bool):
     if value:
-        console.print(f"wheelwright {__version__}")
+        console.print(f"sagepypi {__version__}")
         raise typer.Exit()
 
 
@@ -405,8 +405,8 @@ def main_callback(
 def install_hooks(
     package_path: Path = typer.Argument(".", help="Path to the package directory"),
 ):
-    """Install wheelwright git hooks (pre-commit, pre-push) into your repository."""
-    from wheelwright.hooks import install_git_hooks
+    """Install sagepypi git hooks (pre-commit, pre-push) into your repository."""
+    from sagepypi.hooks import install_git_hooks
 
     console.print("[bold]Installing git hooks...[/bold]")
     success = install_git_hooks(package_path)
@@ -422,8 +422,8 @@ def install_hooks(
 def uninstall_hooks(
     package_path: Path = typer.Argument(".", help="Path to the package directory"),
 ):
-    """Uninstall wheelwright git hooks."""
-    from wheelwright.hooks import uninstall_git_hooks
+    """Uninstall sagepypi git hooks."""
+    from sagepypi.hooks import uninstall_git_hooks
 
     console.print("[bold]Uninstalling git hooks...[/bold]")
     uninstall_git_hooks(package_path)
@@ -728,16 +728,16 @@ def publish(
 
     Examples:
         # Bump patch version and publish to PyPI (dry-run)
-        wheelwright publish . --auto-bump patch
+        sagepypi publish . --auto-bump patch
 
         # Real publish to PyPI
-        wheelwright publish . --auto-bump patch --no-dry-run
+        sagepypi publish . --auto-bump patch --no-dry-run
 
         # Publish to TestPyPI for testing
-        wheelwright publish . --auto-bump minor -r testpypi --no-dry-run
+        sagepypi publish . --auto-bump minor -r testpypi --no-dry-run
 
         # Public source release (no bytecode compilation)
-        wheelwright publish . --auto-bump patch --mode public --no-dry-run
+        sagepypi publish . --auto-bump patch --mode public --no-dry-run
     """
     console.print("[bold cyan]🚀 Starting publish workflow...[/bold cyan]\n")
 
@@ -797,7 +797,7 @@ def publish(
         console.print(f"\n[dim]要真正发布到 {repository.upper()}，请运行:[/dim]")
         bump_flag = f" --auto-bump {auto_bump}" if auto_bump else ""
         console.print(
-            f"  [cyan]wheelwright publish {package_path}{bump_flag} -r {repository} --no-dry-run[/cyan]"
+            f"  [cyan]sagepypi publish {package_path}{bump_flag} -r {repository} --no-dry-run[/cyan]"
         )
     else:
         console.print("[bold green]🎉 发布成功！[/bold green]")
