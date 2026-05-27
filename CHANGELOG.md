@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Rename the public tool branding from `sage-pypi-publisher` to `pypi-publisher` across the CLI, package metadata, hooks, and quickstart flow so it can be released as a general-purpose publisher.
 - Rename the public tool branding from `pypi-publisher` to `wheelwright` across the package, CLI, source module, docs, and workspace integration.
 - Rename the public tool branding from `wheelwright` to `sagepypi` across the package, CLI, source module, docs, and workspace integration.
+- Clarify installation and release documentation so repositories use the GitHub install path until the first public `sagepypi` PyPI release is available.
 
 ### Fixed
 - Issue #6: CI workflow 补充 `workflow_dispatch`，确保 `main-dev` 可手动触发并作为主开发分支稳定运行。

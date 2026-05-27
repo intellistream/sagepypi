@@ -109,7 +109,8 @@ if command -v sagepypi &> /dev/null; then
     echo -e "${GREEN}✓ sagepypi found${NC}"
 else
     echo -e "${YELLOW}⚠  sagepypi not found${NC}"
-    echo -e "${YELLOW}  Optional for PyPI publishing: pip install sagepypi${NC}"
+    echo -e "${YELLOW}  Install from GitHub until the first PyPI release:${NC}"
+    echo -e "${YELLOW}  python -m pip install \"sagepypi @ git+https://github.com/intellistream/sagepypi.git@main\"${NC}"
 fi
 
 echo ""
@@ -170,7 +171,7 @@ read -r INSTALL_PY
 if [[ "$INSTALL_PY" =~ ^[Yy]$ ]]; then
     echo -e "${YELLOW}Installing in editable mode...${NC}"
     cd "$PROJECT_ROOT"
-    pip install -e .
+    python -m pip install -e .
     echo -e "${GREEN}✓ Python package installed${NC}"
 else
     echo -e "${YELLOW}Skipping Python package install${NC}"

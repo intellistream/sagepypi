@@ -73,7 +73,7 @@ if [ "$VERSION_UPDATED" = true ]; then
             fi
         else
             echo -e "${YELLOW}⚠ sagepypi not found${NC}"
-            echo -e "${YELLOW}Install: pip install sagepypi${NC}"
+            echo -e "${YELLOW}Install: python -m pip install \"sagepypi @ git+https://github.com/intellistream/sagepypi.git@main\"${NC}"
             echo -e "${YELLOW}Continue push? [y/N]${NC}"
             read -r cont </dev/tty
             [[ ! "$cont" =~ ^[Yy]$ ]] && exit 1

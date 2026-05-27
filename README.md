@@ -36,10 +36,40 @@ sagepypi build . --upload --no-dry-run
 
 ## Installation
 ```bash
-pip install .
-# or
-pip install sagepypi
+# From the local checkout
+python -m pip install -e .
+
+# From GitHub (recommended until the first public PyPI release)
+python -m pip install "sagepypi @ git+https://github.com/intellistream/sagepypi.git@main"
+
+# After the first public release lands on PyPI
+python -m pip install sagepypi
 ```
+
+## Release Workflow
+
+### Maintainer Flow
+
+```bash
+# 1. Update the single version source
+vi src/sagepypi/_version.py
+
+# 2. Validate the repository locally
+PYTHONPATH=src python -m pytest tests -q
+
+# 3. Publish to TestPyPI first
+python -m pip install -e .
+sagepypi build . --upload -r testpypi --no-dry-run
+
+# 4. Publish to production PyPI
+sagepypi build . --upload -r pypi --no-dry-run
+```
+
+### Notes For Downstream Repositories
+
+- Until `sagepypi` has a public PyPI release, downstream repositories should install it from `git+https://github.com/intellistream/sagepypi.git@main`.
+- After the first public release, downstream install instructions can switch to `python -m pip install sagepypi`.
+- The canonical repository is `intellistream/sagepypi`; old `wheelwright` references should be treated as historical only.
 
 ## CLI
 
